@@ -46,11 +46,17 @@ class Graph:
 	def out_degree(self, node_code):
 		return len(self.vertices[node_code].children)
 
-	def fecundity(self, node_code):
-		return self.out_degree(node_code)
+	def fecundity(self, node_code, get_set=False):
+		if not get_set:
+			return self.out_degree(node_code)
+		else:
+			return self.vertices[node_code].children
 
-	def inverse_fecundity(self, node_code):
-		return self.in_degree(node_code)
+	def inverse_fecundity(self, node_code, get_set=False):
+		if not get_set:
+			return self.in_degree(node_code)
+		else:
+			return self.vertices[node_code].parents
 
 	def descendants(self, node_code):
 		stack = [c for c in self.vertices[node_code].children]
@@ -151,10 +157,34 @@ class Graph:
 		return len(generations)
 
 	def cousins(self, node_code):
-		return 9
+		v_inverse_fecundity = self.vertices[node_code].parents
+		z_inverse_fecundity = []
+		for i in v_inverse_fecundity:
+			z_inverse_fecundity.extend(i.parents)
+		x_fecundity = []
+		for j in z_inverse_fecundity:
+			x_fecundity.extend(j.children)
+		cousins = set()
+		for w in x_fecundity:
+			for u in w.children:
+				if u.code is not node_code:
+					cousins.add(u)
+		return len(cousins)
 
 	def inverse_cousins(self, node_code):
-		return 9
+		v_fecundity = self.vertices[node_code].children
+		z_fecundity = []
+		for i in v_fecundity:
+			z_fecundity.extend(i.children)
+		x_inverse_fecundity = []
+		for j in z_fecundity:
+			x_inverse_fecundity.extend(j.parents)
+		cousins = set()
+		for w in x_inverse_fecundity:
+			for u in w.parents:
+				if u.code is not node_code:
+					cousins.add(u)
+		return len(cousins)
 
 	def genealogical_index(self, node_code):
 		max_gi = len(self.vertices[node_code].children)
