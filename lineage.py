@@ -47,23 +47,7 @@ for e in edges:
 		other_attributes[k] = e[k]
 	g.add_edge(source, target, other_attributes)
 
-print('[4] calculating metrics')
-for v in g.vertices:
-	g.vertices[v].metrics['d+'] = g.descendants(v)
-	g.vertices[v].metrics['d-'] = g.inverse_descendants(v)
-	g.vertices[v].metrics['f+'] = g.fecundity(v)
-	g.vertices[v].metrics['f-'] = g.inverse_fecundity(v)
-	g.vertices[v].metrics['ft+'] = g.fertility(v)
-	g.vertices[v].metrics['ft-'] = g.inverse_fertility(v)
-	g.vertices[v].metrics['c+'] = g.cousins(v)
-	g.vertices[v].metrics['c-'] = g.inverse_cousins(v)
-	g.vertices[v].metrics['ge+'] = g.generations(v)
-	g.vertices[v].metrics['ge-'] = g.inverse_generations(v)
-	g.vertices[v].metrics['r+'] = g.relationships(v)
-	g.vertices[v].metrics['r-'] = g.inverse_relationships(v)
-	g.vertices[v].metrics['gi'] = g.genealogical_index(v)
-
-print('[5] calculating lineage of vertex %s' %node_id)
+print('[4] calculating lineage of vertex %s' %node_id)
 subg_vertices = []
 subg_edges = []
 
@@ -91,6 +75,24 @@ for k, gen in vertex_descendants.items():
 for e in g.edges:
 	if e.source in subg_vertices and e.target in subg_vertices:
 		subg_edges.append(e)
+
+print('[5] calculating metrics')
+subg_codes = [v.code for v in subg_vertices]
+for v in g.vertices:
+	if v in subg_codes:
+		g.vertices[v].metrics['d+'] = g.descendants(v)
+		g.vertices[v].metrics['d-'] = g.inverse_descendants(v)
+		g.vertices[v].metrics['f+'] = g.fecundity(v)
+		g.vertices[v].metrics['f-'] = g.inverse_fecundity(v)
+		g.vertices[v].metrics['ft+'] = g.fertility(v)
+		g.vertices[v].metrics['ft-'] = g.inverse_fertility(v)
+		g.vertices[v].metrics['c+'] = g.cousins(v)
+		g.vertices[v].metrics['c-'] = g.inverse_cousins(v)
+		g.vertices[v].metrics['ge+'] = g.generations(v)
+		g.vertices[v].metrics['ge-'] = g.inverse_generations(v)
+		g.vertices[v].metrics['r+'] = g.relationships(v)
+		g.vertices[v].metrics['r-'] = g.inverse_relationships(v)
+		g.vertices[v].metrics['gi'] = g.genealogical_index(v)
 
 subg_vertices = sorted(subg_vertices, key=lambda x:int(x.code))
 subg_edges = sorted(subg_edges, key=lambda x:(int(x.source.code), int(x.target.code)))
