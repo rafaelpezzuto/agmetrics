@@ -142,7 +142,16 @@ class Graph:
 					stack.append(c)
 		return len(relationships)
 
-	def generations(self, node_code, return_lenght=True):
+	def grandchildren(self, node_code):
+		children = self.vertices[node_code].children
+		grandchildren = []
+		for c in children:
+			for gc in c.children:
+				if gc not in grandchildren:
+					grandchildren.append(gc)
+		return grandchildren
+
+	def generations(self, node_code, return_length=True):
 		height = 0
 		stack = [(self.vertices[node_code], height)]
 		visited = []
@@ -157,12 +166,12 @@ class Graph:
 						generations[height] = [c]
 					else:
 						generations[height].append(c)
-		if return_lenght:
+		if return_length:
 			return len(generations)
 		else:
 			return generations
 
-	def inverse_generations(self, node_code, return_lenght=True):
+	def inverse_generations(self, node_code, return_length=True):
 		height = 0
 		stack = [(self.vertices[node_code], height)]
 		visited = []
@@ -177,7 +186,7 @@ class Graph:
 						generations[height] = [c]
 					else:
 						generations[height].append(c)
-		if return_lenght:
+		if return_length:
 			return len(generations)
 		else:
 			return generations
