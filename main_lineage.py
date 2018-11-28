@@ -56,7 +56,7 @@ vertex.lineage = 'Origin'
 vertex.lineage_distance = 0
 subg_vertices.append(vertex)
 
-vertex_ancestors = g.inverse_generations(node_id, return_lenght=False)
+vertex_ancestors = g.inverse_generations(node_id, return_length=False)
 for k, gen in vertex_ancestors.items():
 	for v in gen:
 		d = k + 1
@@ -64,7 +64,7 @@ for k, gen in vertex_ancestors.items():
 		v.lineage_distance = -d
 		subg_vertices.append(v)
 
-vertex_descendants = g.generations(node_id, return_lenght=False)
+vertex_descendants = g.generations(node_id, return_length=False)
 for k, gen in vertex_descendants.items():
 	for v in gen:
 		d = k + 1
