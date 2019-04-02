@@ -4,7 +4,7 @@ Calcula métricas topológicas em grafos de genealogia acadêmica.
 
 ## Descrição
 
-O AGMetrics calcula até 13 métricas topológicas para os vértices de grafos de genealogia acadêmica. A **entrada de dados** é uma lista vértices e areastas de um grafo de genealogia acadêmica. A **saída** é uma lista de métricas para cada vértice do grafo.
+O AGMetrics calcula 13 métricas topológicas para os vértices de grafos de genealogia acadêmica. A **entrada de dados** é uma lista vértices e arestas de um grafo de genealogia acadêmica. A **saída** é uma lista de métricas para cada vértice do grafo.
 
 
 ## Como usar
@@ -24,12 +24,12 @@ Para calcular a linhagem acadêmica de um vértice, indique seu código (id) no 
 
 ## Opções
 
-É preciso indicar no arquivo `config.py` o local exato no disco do arquivo de vértices, arestas bem como dos arquivos resultantes a serem gerados por este script. Lá também se deve indicar o código ou id do pesquisador que se deseja obter a linhagem acadêmica.
+É preciso indicar no arquivo `config.py` o local do arquivo de vértices, arestas bem como dos arquivos resultantes a serem gerados por este script. Lá também se deve indicar o código ou id do pesquisador que o qual se deseja obter a linhagem acadêmica.
 
 
 ## Métricas genealógicas
 
-As seguntes medidas topológicas de cada vértice são calculadas no sentido ascendente (**-**) e descendente (**+**):
+As seguintes medidas topológicas de cada vértice são calculadas no sentido ascendente (**-**) e descendente (**+**):
 
 - Descendência (**d-** e **d+**)
 - Fecundidade (**fc-** e **fc+**)
