@@ -1,10 +1,10 @@
 # AGMetrics
-Calcula métricas topológicas em grafos de genealogia acadêmica.
+Calcula métricas topológicas, obtém a linhagem de vértices e verifica a existência de padrões em grafos de genealogia acadêmica.
 
 
 ## Descrição
 
-O AGMetrics calcula 13 métricas topológicas para os vértices de grafos de genealogia acadêmica. A **entrada de dados** é uma lista vértices e arestas de um grafo de genealogia acadêmica. A **saída** é uma lista de métricas para cada vértice do grafo.
+O AGMetrics calcula 13 métricas topológicas para os vértices de grafos de genealogia acadêmica bem como a linhagem de vértices. A **entrada de dados** é uma lista vértices e arestas de um grafo de genealogia acadêmica. A **saída** é uma lista de métricas para cada vértice do grafo. No caso da linhagem, adicionalmente, é preciso indicar qual vértice deseja-se obter a linhagem bem como o sentido (ascendente, descendente ou ambos).
 
 
 ## Como usar
@@ -38,6 +38,16 @@ As seguintes medidas topológicas de cada vértice são calculadas no sentido as
 - Índice genealógico (**g**)
 - Primos (**c-** e **c+**)
 - Relações (**r-** e **r+**)
+
+
+## Linhagem
+
+- Ascendente
+- Descendente
+- Ascendente e Descendente
+
+
+## Padrões [TODO]
 
 
 ## Autor

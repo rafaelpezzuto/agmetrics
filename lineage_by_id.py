@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from model.graph import Edge, Graph, Node
 from model.metrics import MetricsCalculator as mc
 
