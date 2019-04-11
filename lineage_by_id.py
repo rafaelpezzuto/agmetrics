@@ -1,8 +1,10 @@
+#!/usr/bin/python3
 from model.graph import Edge, Graph, Node
+from model.metrics import MetricsCalculator as mc
 
 import config
-import sys
 import time
+
 
 start = time.time()
 
@@ -60,7 +62,7 @@ node.lineage_distance = 0
 subg_nodes.append(node)
 
 if not only_descendants:
-	node_ancestors = g.inverse_generations(lineage_node_id, return_length=False)
+	node_ancestors = mc.inverse_generations(g, lineage_node_id, return_length=False)
 	for k, gen in node_ancestors.items():
 		for v in gen:
 			d = k + 1
@@ -68,7 +70,7 @@ if not only_descendants:
 			v.lineage_distance = -d
 			subg_nodes.append(v)
 
-node_descendants = g.generations(lineage_node_id, return_length=False)
+node_descendants = mc.generations(g, lineage_node_id, return_length=False)
 for k, gen in node_descendants.items():
 	for v in gen:
 		d = k + 1
@@ -84,19 +86,19 @@ print('[5] calculating metrics')
 subg_codes = [v.code for v in subg_nodes]
 for v in g.nodes:
 	if v in subg_codes:
-		g.nodes[v].metrics['d+'] = g.descendants(v)
-		g.nodes[v].metrics['d-'] = g.inverse_descendants(v)
-		g.nodes[v].metrics['f+'] = g.fecundity(v)
-		g.nodes[v].metrics['f-'] = g.inverse_fecundity(v)
-		g.nodes[v].metrics['ft+'] = g.fertility(v)
-		g.nodes[v].metrics['ft-'] = g.inverse_fertility(v)
-		g.nodes[v].metrics['c+'] = g.cousins(v)
-		g.nodes[v].metrics['c-'] = g.inverse_cousins(v)
-		g.nodes[v].metrics['ge+'] = g.generations(v)
-		g.nodes[v].metrics['ge-'] = g.inverse_generations(v)
-		g.nodes[v].metrics['r+'] = g.relationships(v)
-		g.nodes[v].metrics['r-'] = g.inverse_relationships(v)
-		g.nodes[v].metrics['gi'] = g.genealogical_index(v)
+		g.nodes[v].metrics['d+'] = mc.descendants(g, v)
+		g.nodes[v].metrics['d-'] = mc.inverse_descendants(g, v)
+		g.nodes[v].metrics['f+'] = mc.fecundity(g, v)
+		g.nodes[v].metrics['f-'] = mc.inverse_fecundity(g, v)
+		g.nodes[v].metrics['ft+'] = mc.fertility(g, v)
+		g.nodes[v].metrics['ft-'] = mc.inverse_fertility(g, v)
+		g.nodes[v].metrics['c+'] = mc.cousins(g, v)
+		g.nodes[v].metrics['c-'] = mc.inverse_cousins(g, v)
+		g.nodes[v].metrics['ge+'] = mc.generations(g, v)
+		g.nodes[v].metrics['ge-'] = mc.inverse_generations(g, v)
+		g.nodes[v].metrics['r+'] = mc.relationships(g, v)
+		g.nodes[v].metrics['r-'] = mc.inverse_relationships(g, v)
+		g.nodes[v].metrics['gi'] = mc.genealogical_index(g, v)
 
 subg_nodes = sorted(subg_nodes, key=lambda x:int(x.code))
 subg_edges = sorted(subg_edges, key=lambda x:(int(x.source.code), int(x.target.code)))

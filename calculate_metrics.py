@@ -1,7 +1,10 @@
-from model.graph import Node, Edge, Graph
+#!/usr/bin/python3
+from model.graph import Edge, Graph, Node
+from model.metrics import MetricsCalculator as mc
 
 import config
 import time
+
 
 start = time.time()
 
@@ -32,7 +35,7 @@ file_metrics.write('node_id,d+,d-,fc+,fc-,ft+,ft-,c+,c-,ge+,ge-,r+,r-,g\n')
 metrics = []
 for index, i in enumerate(g.nodes):
 	print('%s of %s\r' %(index + 1, len(nodes)), end='')
-	metrics.append(','.join([str(k) for k in [i, g.descendants(i), g.inverse_descendants(i), g.fecundity(i), g.inverse_fecundity(i), g.fertility(i), g.inverse_fertility(i), g.cousins(i), g.inverse_cousins(i), g.generations(i), g.inverse_generations(i), g.relationships(i), g.inverse_relationships(i), g.genealogical_index(i)]]))
+	metrics.append(','.join([str(k) for k in [i, mc.descendants(g, i), mc.inverse_descendants(g, i), mc.fecundity(g, i), mc.inverse_fecundity(g, i), mc.fertility(g, i), mc.inverse_fertility(g, i), mc.cousins(g, i), mc.inverse_cousins(g, i), mc.generations(g, i), mc.inverse_generations(g, i), mc.relationships(g, i), mc.inverse_relationships(g, i), mc.genealogical_index(g, i)]]))
 
 metrics = sorted(metrics, key=lambda x:int(x.split(',')[0]))
 
