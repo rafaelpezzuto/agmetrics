@@ -4,12 +4,12 @@ LINEAGE = {
 }
 
 PATHS = {
-    # 'FILE_IN_NODES': 'example/nodes.gdf',
-    # 'FILE_IN_EDGES': 'example/edges.gdf',
-    'FILE_IN_NODES': '/mnt/dados/massive/dataset-pa-04-2018/vertices.csv',
-    'FILE_IN_EDGES': '/mnt/dados/massive/dataset-pa-04-2018/arestas.csv',
-    'FILE_OUT_METRICS': 'example/metrics_pa.csv',
-    'FILE_OUT_GRANDFATHER_VS_GRANDCHILDREN_METRICS': 'example/gfgc_metrics.csv',
-    'FILE_OUT_LINEAGE': 'example/lineage_' + LINEAGE.get('LINEAGE_NODE_ID', '0') + '.gdf'
+    'FILE_IN_NODES': '/mnt/dados/Rafael/issi-2019/base/grafo/vertices.gdf',
+    'FILE_IN_EDGES': '/mnt/dados/Rafael/issi-2019/base/grafo/arestas.gdf',
+    'FILE_IN_IDS_ISSI2019': '/mnt/dados/Rafael/issi-2019/base/grafo/ids-table-2.csv',
+    'FILE_OUT_METRICS': '/mnt/dados/Rafael/issi-2019/base/metricas.csv',
+    'FILE_OUT_CHILDREN': '/mnt/dados/Rafael/issi-2019/base/filhos.csv',
+    'FILE_OUT_GRANDFATHER_VS_GRANDCHILDREN_METRICS': '/mnt/dados/Rafael/issi-2019/base/metricas_gf_vs_gc.csv',
+    'FILE_OUT_LINEAGE': '/mnt/dados/Rafael/issi-2019/base/lineage_' + LINEAGE.get('LINEAGE_NODE_ID', '0') + '.gdf'
 }
 
