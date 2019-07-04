@@ -1,13 +1,19 @@
+#!/usr/bin/env python3
 from model.graph import Node, Edge, Graph
 
-import config
+# import config
+import sys
 import time
+
 
 start = time.time()
 
-file_nodes = open(config.PATHS.get('FILE_IN_NODES'))
-file_edges = open(config.PATHS.get('FILE_IN_EDGES'))
-file_metrics = open(config.PATHS.get('FILE_OUT_METRICS'), 'w')
+# file_nodes = open(config.PATHS.get('FILE_IN_NODES'))
+# file_edges = open(config.PATHS.get('FILE_IN_EDGES'))
+# file_metrics = open(config.PATHS.get('FILE_OUT_METRICS'), 'w')
+file_nodes = open(sys.argv[1])
+file_edges = open(sys.argv[2])
+file_metrics = open(sys.argv[3], 'w')
 
 print('[1] reading nodes')
 head_nodes = file_nodes.readline()
