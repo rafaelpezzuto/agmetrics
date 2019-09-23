@@ -3,7 +3,7 @@ import os
 import sys
 
 
-BASE_FOLDER = '/home/rafael/Temp/2017-08-acacia-aglattes-1.1/subgrafos/anos/'
+BASE_FOLDER = '/home/rafael/Temp/2017-08-acacia-aglattes-1.1/subgrafos/anos/cum/metrics/'
 
 files = os.listdir(BASE_FOLDER)
 metric_files = [f for f in files if f.startswith('metrics')]
