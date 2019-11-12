@@ -1,36 +1,35 @@
 #!/usr/bin/env python3
-from model.graph import Node, Edge, Graph
-
-# import config
 import sys
 import time
+
+sys.path.append('../aglattes')
+
+from model.graph import Graph
+from models.acacia import LattesPesquisadorAcacia, LattesRelacaoAcacia
+from scripts.file_utils import FileUtils
+
 
 
 start = time.time()
 
-# file_nodes = open(config.PATHS.get('FILE_IN_NODES'))
-# file_edges = open(config.PATHS.get('FILE_IN_EDGES'))
-# file_metrics = open(config.PATHS.get('FILE_OUT_METRICS'), 'w')
-file_nodes = open(sys.argv[1])
-file_edges = open(sys.argv[2])
+file_nodes = sys.argv[1]
+file_edges = sys.argv[2]
 file_metrics = open(sys.argv[3], 'w')
 
 print('[1] reading nodes')
-head_nodes = file_nodes.readline()
-nodes = [v.strip().split(',') for v in file_nodes]
+nodes = FileUtils.get_data_from_csv(file_nodes, class_name=LattesPesquisadorAcacia)
 
 print('[2] reading edges')
-head_edges = file_edges.readline()
-edges = [e.strip().split(',') for e in file_edges]
+edges = FileUtils.get_data_from_csv(file_edges, class_name=LattesRelacaoAcacia)
 
 print('[3] creating graph')
 g = Graph()
 for v in nodes:
-	code = v[0]
+	code = v.id_lattes
 	g.add_node(code)
 for e in edges:
-	source = e[0]
-	target = e[1]
+	source = e.origem_id_lattes
+	target = e.destino_id_lattes
 	g.add_edge(source, target)
 
 print('[4] calculating metrics')
@@ -49,4 +48,4 @@ for i in metrics:
 file_metrics.close()
 
 end = time.time()
-print('The calculation was performed in %.3f seconds' %(end - start))
+print('The calculation was performed in %.3f seconds' % (end - start))
