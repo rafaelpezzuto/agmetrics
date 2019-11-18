@@ -1,8 +1,8 @@
 import os
 
-GLOBAL_VERTICES = '/home/rafael/Temp/acacia-v2-2019-10-05/oficial_data/data_vertices.csv'
-BIBLIOMETRICS = '/home/rafael/Temp/acacia-v2-2019-10-05/oficial_data/data_bibliometrics.csv'
-SUBGRAPHS_DIR = '/home/rafael/Temp/primeira_grande_area/'
+GLOBAL_VERTICES = '/home/rafael/Temp/thesis/graphs/global-vertices.csv'
+BIBLIOMETRICS = '/home/rafael/Temp/thesis/graphs/global-bibliometrics.csv'
+SUBGRAPHS_DIR = '/home/rafael/Temp/thesis/subgraphs/primeira_area/'
 
 print('reading global vertices')
 global_vertices = [m.strip().split(',') for m in open(GLOBAL_VERTICES)]
@@ -43,12 +43,12 @@ for a in subgraphs:
         vstr = id2local_vertex[i]
 
         if i not in id2bibliometrics:
-            vstr.extend(['0' for x in range(num_els_bibliometrics)])
+            vstr.extend(['-1' for x in range(num_els_bibliometrics)])
         else:
             vstr.extend(id2bibliometrics[i])
 
         if i not in id2local_metrics:
-            vstr.extend(['0' for x in range(num_els_local_metrics)])
+            vstr.extend(['-1' for x in range(num_els_local_metrics)])
         else:
             vstr.extend(id2local_metrics[i])
 
