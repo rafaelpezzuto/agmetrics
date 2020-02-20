@@ -79,29 +79,29 @@ if __name__ == '__main__':
             wf2c.write('\t'.join([f] + [str(id2vertex[f].__dict__[m]) for m in measures] + [c] + [str(id2vertex[c].__dict__[m]) for m in measures]) + '\n')
     wf2c.close()
 
-    wf2c = open('f2c-mean.csv', 'w')
-    wf2c.write('\t'.join(['father-code'] + ['father-' + m for m in measures] + ['child-mean-' + m for m in measures]) + '\n')
-    for f in f2c:
-        fm = [str(id2vertex[f].__dict__[m]) for m in measures]
-        cm = [[] for x in measures]
-        for c in f2c[f]:
-            for i, m in enumerate(measures):
-                v = id2vertex[c].__dict__[m]
-                if isinstance(v, str):
-                    if v.isdigit():
-                        v = int(v)
-                    else:
-                        v = -1
-                cm[i].append(v)
-        cmmean = []
-        for cmi in cm:
-            nonnull = [x for x in cmi if x >= 0]
-            n = len(nonnull)
-            if n > 0:
-                cmmean.append(float(sum(nonnull)/n))
-            else:
-                cmmean.append('nan')
-        wf2c.write('\t'.join([f] + fm + [str(y) for y in cmmean]) + '\n')
+    # wf2c = open('f2c-mean.csv', 'w')
+    # wf2c.write('\t'.join(['father-code'] + ['father-' + m for m in measures] + ['child-mean-' + m for m in measures]) + '\n')
+    # for f in f2c:
+    #     fm = [str(id2vertex[f].__dict__[m]) for m in measures]
+    #     cm = [[] for x in measures]
+    #     for c in f2c[f]:
+    #         for i, m in enumerate(measures):
+    #             v = id2vertex[c].__dict__[m]
+    #             if isinstance(v, str):
+    #                 if v.isdigit():
+    #                     v = int(v)
+    #                 else:
+    #                     v = -1
+    #             cm[i].append(v)
+    #     cmmean = []
+    #     for cmi in cm:
+    #         nonnull = [x for x in cmi if x >= 0]
+    #         n = len(nonnull)
+    #         if n > 0:
+    #             cmmean.append(float(sum(nonnull)/n))
+    #         else:
+    #             cmmean.append('nan')
+    #     wf2c.write('\t'.join([f] + fm + [str(y) for y in cmmean]) + '\n')
 
     print('grandfather -> grandchildren')
     wgf2gc = open('gf2gc-raw.csv', 'w')
@@ -111,27 +111,27 @@ if __name__ == '__main__':
             wgf2gc.write('\t'.join([gf] + [str(id2vertex[gf].__dict__[m]) for m in measures] + [gc] + [str(id2vertex[gc].__dict__[m]) for m in measures]) + '\n')
     wgf2gc.close()
 
-    wgf2gc = open('gf2gc-mean.csv', 'w')
-    wgf2gc.write('\t'.join(['grandfather-code'] + ['grandfather-' + m for m in measures] + ['grandchild-mean-' + m for m in measures]) + '\n')
-    for gf in gf2gc:
-        gfm = [str(id2vertex[gf].__dict__[m]) for m in measures]
-        gcm = [[] for x in measures]
-        for gc in gf2gc[gf]:
-            for i, m in enumerate(measures):
-                v = id2vertex[gc].__dict__[m]
-                if isinstance(v, str):
-                    if v.isdigit():
-                        v = int(v)
-                    else:
-                        v = -1
-                gcm[i].append(v)
-        gcmmean = []
-        for gcmi in gcm:
-            nonnull = [x for x in gcmi if x >= 0]
-            n = len(nonnull)
-            if n > 0:
-                gcmmean.append(float(sum(nonnull)/n))
-            else:
-                gcmmean.append('nan')
-        wgf2gc.write('\t'.join([gf] + gfm + [str(y) for y in gcmmean]) + '\n')
-    wgf2gc.close()
+    # wgf2gc = open('gf2gc-mean.csv', 'w')
+    # wgf2gc.write('\t'.join(['grandfather-code'] + ['grandfather-' + m for m in measures] + ['grandchild-mean-' + m for m in measures]) + '\n')
+    # for gf in gf2gc:
+    #     gfm = [str(id2vertex[gf].__dict__[m]) for m in measures]
+    #     gcm = [[] for x in measures]
+    #     for gc in gf2gc[gf]:
+    #         for i, m in enumerate(measures):
+    #             v = id2vertex[gc].__dict__[m]
+    #             if isinstance(v, str):
+    #                 if v.isdigit():
+    #                     v = int(v)
+    #                 else:
+    #                     v = -1
+    #             gcm[i].append(v)
+    #     gcmmean = []
+    #     for gcmi in gcm:
+    #         nonnull = [x for x in gcmi if x >= 0]
+    #         n = len(nonnull)
+    #         if n > 0:
+    #             gcmmean.append(float(sum(nonnull)/n))
+    #         else:
+    #             gcmmean.append('nan')
+    #     wgf2gc.write('\t'.join([gf] + gfm + [str(y) for y in gcmmean]) + '\n')
+    # wgf2gc.close()
