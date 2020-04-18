@@ -16,7 +16,7 @@ if __name__ == '__main__':
 	file_edges = sys.argv[2]
 	file_metrics = open(sys.argv[3], 'w')
 
-	print('[1] reading nodes')
+	print('[1] reading nodes %s' % file_nodes)
 	nodes = FileUtils.get_data_from_csv(file_nodes, class_name=LattesPesquisadorAcacia)
 
 	print('[2] reading edges')
@@ -33,11 +33,11 @@ if __name__ == '__main__':
 		g.add_edge(source, target)
 
 	print('[4] calculating metrics')
-	file_metrics.write('node_id,d+,d-,fc+,fc-,ft+,ft-,c+,c-,ge+,ge-,r+,r-,g\n')
+	file_metrics.write('node_id,d+,d-,fc+,fc-,ft+,ft-,c+,c-,ge+,ge-,r+,r-,g,s,e1,e2,e3\n')
 	metrics = []
 	for index, i in enumerate(g.nodes):
 		print('%s of %s\r' %(index + 1, len(nodes)), end='')
-		metrics.append(','.join([str(k) for k in [i, g.descendants(i), g.inverse_descendants(i), g.fecundity(i), g.inverse_fecundity(i), g.fertility(i), g.inverse_fertility(i), g.cousins(i), g.inverse_cousins(i), g.generations(i), g.inverse_generations(i), g.relationships(i), g.inverse_relationships(i), g.genealogical_index(i)]]))
+		metrics.append(','.join([str(k) for k in [i, g.descendants(i), g.inverse_descendants(i), g.fecundity(i), g.inverse_fecundity(i), g.fertility(i), g.inverse_fertility(i), g.cousins(i), g.inverse_cousins(i), g.generations(i), g.inverse_generations(i), g.relationships(i), g.inverse_relationships(i), g.genealogical_index(i), g.siblings(i), ','.join([str(e) for e in g.ego(i, 3)])]]))
 
 	metrics = sorted(metrics, key=lambda x:int(x.split(',')[0]))
 

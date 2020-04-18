@@ -1,56 +1,41 @@
 from model.graph import Edge, Graph, Node
+from scripts.file_utils import FileUtils
+from models.acacia import LattesPesquisadorAcacia, LattesRelacaoAcacia
 
-import config
 import sys
 import time
 
+
+NODE_ATTRS = ['nome', 'primeira_grande_area', 'primeira_area', 'profi_instituicao', 'profi_orgao', 'profi_pais', 'profi_uf', 'profi_cidade', 'profi_bairro', 'profi_logradouro', 'profi_cep', 'pais_de_nascimento', 'uf_nascimento', 'cidade_nascimento', 'nacionalidade', 'pais_de_nacionalidade', 'sigla_pais_nacionalidade', 'data_ultima_atualizacao_curriculo', 'dp', 'dm', 'fcp', 'fcm', 'ftp', 'ftm', 'cp', 'cm', 'gp', 'gm', 'rp', 'rm', 'gi', 'nome_preprocessado']
+EDGE_ATTRS = ['origem_nome', 'destino_nome', 'titulacao', 'sensu', 'tipo_orientacao', 'ano_inicio', 'ano_conclusao', 'curso', 'instituicao', 'tese', 'grande_area', 'area', 'titulacoes', 'directed']
+
 start = time.time()
 
-lineage_node_id = config.LINEAGE.get('LINEAGE_NODE_ID')
-only_descendants = config.LINEAGE.get('ONLY_DESCENDANTS')
-file_nodes = open(config.PATHS.get('FILE_IN_NODES'))
-file_edges = open(config.PATHS.get('FILE_IN_EDGES'))
-file_lineage = open(config.PATHS.get('FILE_OUT_LINEAGE'), 'w')
+lineage_node_id = sys.argv[1]
+file_nodes = sys.argv[2]
+file_edges = sys.argv[3]
 
-print('[1] reading nodes')
-head_nodes = file_nodes.readline().strip().split(',')
-nodes = []
-for line in file_nodes:
-	node = {}
-	elements = line.strip().split(',')
-	for i, element in enumerate(elements):
-		node[head_nodes[i]] = element
-	nodes.append(node)
-
-print('[2] reading edges')
-head_edges = file_edges.readline().strip().split(',')
-edges = []
-for line in file_edges:
-	edge = {}
-	elements = line.strip().split(',')
-	for i, element in enumerate(elements):
-		edge[head_edges[i]] = element
-	edges.append(edge)
+print('[1] reading nodes and edges')
+nodes = FileUtils.get_data_from_csv('/home/rafael/Temp/acacia-v2-2019-10-05/tmp/vertices_final.csv', class_name=LattesPesquisadorAcacia)
+edges = FileUtils.get_data_from_csv('/home/rafael/Temp/acacia-v2-2019-10-05/tmp/arestas_final.csv', class_name=LattesRelacaoAcacia)
 
 print('[3] creating graph')
 g = Graph()
 for v in nodes:
-	code = v[head_nodes[0]]
-	keys = [i for i in v.keys() if i != head_nodes[0]]
+	code = v.id_lattes
 	g.add_node(code)
-	for k in keys:
+	for k in NODE_ATTRS:
 		g.nodes[code].other_attributes[k] = v[k]
 
 for e in edges:
-	source = e[head_edges[0]]
-	target = e[head_edges[1]]
-	keys = [i for i in e.keys() if i != head_edges[0] and i != head_edges[1]]
+	source = e.origem_id_lattes
+	target = e.destino_id_lattes
 	other_attributes = {}
-	for k in keys:
+	for k in EDGE_ATTRS:
 		other_attributes[k] = e[k]
 	g.add_edge(source, target, other_attributes)
 
-print('[4] calculating lineage of node %s' %lineage_node_id)
+print('[4] calculating lineage of node %s' % lineage_node_id)
 subg_nodes = []
 subg_edges = []
 
@@ -58,15 +43,6 @@ node = g.nodes[lineage_node_id]
 node.lineage = 'Origin'
 node.lineage_distance = 0
 subg_nodes.append(node)
-
-if not only_descendants:
-	node_ancestors = g.inverse_generations(lineage_node_id, return_length=False)
-	for k, gen in node_ancestors.items():
-		for v in gen:
-			d = k + 1
-			v.lineage = 'Ancestor'
-			v.lineage_distance = -d
-			subg_nodes.append(v)
 
 node_descendants = g.generations(lineage_node_id, return_length=False)
 for k, gen in node_descendants.items():

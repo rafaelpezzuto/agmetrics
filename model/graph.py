@@ -24,6 +24,10 @@ class Node:
 		else:
 			return ','.join([self.code, self.lineage, str(self.lineage_distance), str_metrics])
 
+	def __hash__(self):
+		return hash(self.code)
+
+
 class Edge:
 	def __init__(self, source_node, target_node, other_attributes={}):
 		self.source = source_node
@@ -43,7 +47,9 @@ class Edge:
 		else:
 			return ','.join([self.source.code, self.target.code])
 
+
 class Graph:
+
 	def __init__(self):
 		self.nodes = {}
 		self.edges = set()
@@ -191,7 +197,7 @@ class Graph:
 		else:
 			return generations
 
-	def cousins(self, node_code):
+	def cousins(self, node_code, return_length=True):
 		v_inverse_fecundity = self.nodes[node_code].parents
 		z_inverse_fecundity = []
 		for i in v_inverse_fecundity:
@@ -204,7 +210,10 @@ class Graph:
 			for u in w.children:
 				if u.code is not node_code:
 					cousins.add(u)
-		return len(cousins)
+		if return_length:
+			return len(cousins)
+		else:
+			return cousins
 
 	def inverse_cousins(self, node_code):
 		v_fecundity = self.nodes[node_code].children
@@ -234,3 +243,64 @@ class Graph:
 				max_gi -= 1
 				same_gi.clear()
 		return max_gi
+
+	def siblings(self, node_code, return_length=True):
+		v_inverse_fecundity = self.nodes[node_code].parents
+		siblings = set()
+		for j in v_inverse_fecundity:
+			for u in j.children:
+				if u.code is not node_code:
+					siblings.add(u)
+		if return_length:
+			return len(siblings)
+		else:
+			return siblings
+
+	def ego(self, node_code, max_h=1, return_length=True):
+		ego = set()
+		parents = self.nodes[node_code].parents
+		children = self.nodes[node_code].children
+		ego = ego.union(set([p.code for p in parents])).union(set(c.code for c in children))
+
+		counter = 1
+		ego_c = {counter: ego}
+
+		up = set()
+		down = set()
+		while counter < max_h:
+			tmp_parents = set()
+			tmp_children = set()
+
+			for p in parents:
+				for pp in p.parents:
+					if pp.code != node_code:
+						up.add(pp.code)
+						tmp_parents.add(self.nodes[pp.code])
+				for pc in p.children:
+					if pc.code != node_code:
+						up.add(pc.code)
+						tmp_parents.add(self.nodes[pc.code])
+
+			for c in children:
+				for cc in c.children:
+					if cc.code != node_code:
+						down.add(cc.code)
+						tmp_children.add(self.nodes[cc.code])
+				for cp in c.parents:
+					if cp.code != node_code:
+						down.add(cp.code)
+						tmp_children.add(self.nodes[cp.code])
+
+			counter += 1
+
+			parents = tmp_parents
+			children = tmp_children
+
+			ego_c[counter] = ego_c[counter-1].union(ego.union(up).union(down))
+
+		# ego = ego.union(up).union(down)
+
+		if return_length:
+			return [len(ego_c[i]) for i in range(1, counter + 1)]
+		else:
+			return [ego_c[i] for i in range(1, counter + 1)]
