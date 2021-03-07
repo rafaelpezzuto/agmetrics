@@ -1,6 +1,7 @@
 class Node:
-	def __init__(self, code):
+	def __init__(self, code, label=''):
 		self.code = code
+		self.label = label
 		self.parents = []
 		self.children = []
 		self.down_adjacent_list = []
@@ -10,42 +11,28 @@ class Node:
 		self.lineage_distance = None
 		self.other_attributes = {}
 
-	def __str__(self):
-		return 'node_' + str(self.code)
-
-	def __repr__(self):
-		return 'node_' + str(self.code)
-	
-	def get_full_str(self, metrics_header, other_attributes_header):
-		str_metrics = ','.join([str(self.metrics[k]) for k in metrics_header])
-		str_other_attributes = ','.join([self.other_attributes[k] for k in other_attributes_header])
-		if len(other_attributes_header) > 0:
-			return ','.join([self.code, str_other_attributes, self.lineage, str(self.lineage_distance), str_metrics])
-		else:
-			return ','.join([self.code, self.lineage, str(self.lineage_distance), str_metrics])
-
 	def __hash__(self):
 		return hash(self.code)
 
+	def __eq__(self, other):
+		if self.__hash__() == other.__hash__():
+			return True
+		return False
+
 
 class Edge:
-	def __init__(self, source_node, target_node, other_attributes={}):
+	def __init__(self, source_node, target_node, year):
 		self.source = source_node
 		self.target = target_node
-		self.other_attributes = other_attributes
+		self.year = year
 
-	def __str__(self):
-		return '->'.join([self.source.code, self.target.code])
+	def __hash__(self):
+		return hash('->'.join([self.source.code, self.target.code, self.year]))
 
-	def __repr__(self):
-		return '->'.join([self.source.code, self.target.code])
-
-	def get_full_str(self, other_attributes_header):
-		str_other_attributes = ','.join([self.other_attributes[k] for k in other_attributes_header])
-		if len(other_attributes_header) > 0:
-			return ','.join([self.source.code, self.target.code, str_other_attributes])
-		else:
-			return ','.join([self.source.code, self.target.code])
+	def __eq__(self, other):
+		if self.__hash__() == other.__hash__():
+			return True
+		return False
 
 
 class Graph:
@@ -54,17 +41,22 @@ class Graph:
 		self.nodes = {}
 		self.edges = set()
 
-	def add_node(self, code):
-		self.nodes[code] = Node(code)
+	def add_node(self, code, label=''):
+		self.nodes[code] = Node(code, label)
 
-	def add_edge(self, source_code, target_code, other_attributes={}):
+	def add_edge(self, source_code, target_code, year):
 		source_node = self.nodes.get(source_code)
 		target_node = self.nodes.get(target_code)
-		self.nodes[source_code].children.append(self.nodes[target_code])
-		self.nodes[target_code].parents.append(self.nodes[source_code])
-		self.edges.add(Edge(source_node, target_node, other_attributes))
-		source_node.down_adjacent_list.append(Edge(source_node, target_node, other_attributes))
-		target_node.up_adjacent_list.append(Edge(source_node, target_node, other_attributes))
+
+		new_edge = Edge(source_node, target_node, year)
+		if new_edge not in self.edges:
+			self.edges.add(new_edge)
+
+			self.nodes[source_code].children.append(self.nodes[target_code])
+			self.nodes[target_code].parents.append(self.nodes[source_code])
+
+			source_node.down_adjacent_list.append(Edge(source_node, target_node, year))
+			target_node.up_adjacent_list.append(Edge(source_node, target_node, year))
 
 	def in_degree(self, node_code):
 		return len(self.nodes[node_code].parents)
@@ -255,52 +247,3 @@ class Graph:
 			return len(siblings)
 		else:
 			return siblings
-
-	def ego(self, node_code, max_h=1, return_length=True):
-		ego = set()
-		parents = self.nodes[node_code].parents
-		children = self.nodes[node_code].children
-		ego = ego.union(set([p.code for p in parents])).union(set(c.code for c in children))
-
-		counter = 1
-		ego_c = {counter: ego}
-
-		up = set()
-		down = set()
-		while counter < max_h:
-			tmp_parents = set()
-			tmp_children = set()
-
-			for p in parents:
-				for pp in p.parents:
-					if pp.code != node_code:
-						up.add(pp.code)
-						tmp_parents.add(self.nodes[pp.code])
-				for pc in p.children:
-					if pc.code != node_code:
-						up.add(pc.code)
-						tmp_parents.add(self.nodes[pc.code])
-
-			for c in children:
-				for cc in c.children:
-					if cc.code != node_code:
-						down.add(cc.code)
-						tmp_children.add(self.nodes[cc.code])
-				for cp in c.parents:
-					if cp.code != node_code:
-						down.add(cp.code)
-						tmp_children.add(self.nodes[cp.code])
-
-			counter += 1
-
-			parents = tmp_parents
-			children = tmp_children
-
-			ego_c[counter] = ego_c[counter-1].union(ego.union(up).union(down))
-
-		# ego = ego.union(up).union(down)
-
-		if return_length:
-			return [len(ego_c[i]) for i in range(1, counter + 1)]
-		else:
-			return [ego_c[i] for i in range(1, counter + 1)]
