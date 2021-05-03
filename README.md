@@ -42,4 +42,4 @@ As seguintes medidas topológicas de cada vértice são calculadas no sentido as
 
 ## Autor
 
-[Rafael J. P. Damaceno](https://rafaelpezzuto.github.io/), doutorando em Ciência da Computação pela Universidade Federal do ABC.
+[Rafael J. P. Damaceno](https://rafaelpezzuto.github.io/)
