@@ -78,6 +78,6 @@ As seguintes medidas topológicas de cada vértice são calculadas no sentido as
 ## Autores
 
 - [Rafael J. P. Damaceno](https://rafaelpezzuto.github.io/)
-- [Luciano Rossi]()
-- [Jesús Pascual Mecha-Chalco]()
+- [Luciano Rossi](https://rossi-luciano.github.io/homepage/)
+- [Jesús Pascual Mecha-Chalco](http://professor.ufabc.edu.br/~jesus.mena/)
 
